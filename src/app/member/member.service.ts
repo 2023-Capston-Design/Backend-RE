@@ -1,35 +1,35 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MemberEntity } from '@src/domain/member/member.entity';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { Logger } from '@hoplin/nestjs-logger';
 import {
-  MemberNotFound,
   DepartmentNotFound,
-  PasswordUnmatched,
-  GroupIDAlreadyTaken,
   EmailAlreadyTaken,
-  InvalidMemberApproval,
   EmailYetConfirmed,
-  DepartmentIdNotGiven,
+  GroupIDAlreadyTaken,
+  InvalidMemberApproval,
+  MemberNotFound,
+  PasswordUnmatched,
   UnsupportedCheckType,
 } from '@infrastructure/exceptions';
-import { CreateMemberDto } from './dto/create-member.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import defaultConfig from '@src/config/config/default.config';
 import { DepartmentEntity } from '@src/domain/department/department.entity';
-import { member } from '@src/infrastructure/types';
 import { InstructorEntity } from '@src/domain/instructor/instructor.entity';
+import { MemberEntity } from '@src/domain/member/member.entity';
 import { StudentEntity } from '@src/domain/student/student.entity';
-import { UpdateMemberDto } from './dto/update-member.dto';
-import { DeleteMemberDto } from './dto/delete-member.dto';
-import { UpdateMemberApprovalDto } from './dto/updateMemberApproval.dto';
-import * as fs from 'fs';
-import { Logger, LoggerModule } from '@hoplin/nestjs-logger';
+import { member } from '@src/infrastructure/types';
 import * as bcrypt from 'bcryptjs';
+import * as fs from 'fs';
+import { DataSource, EntityManager, Repository } from 'typeorm';
+import { CreateMemberDto } from './dto/create-member.dto';
+import { DeleteMemberDto } from './dto/delete-member.dto';
+import { UpdateMemberDto } from './dto/update-member.dto';
+import { UpdateMemberApprovalDto } from './dto/updateMemberApproval.dto';
 import { CheckType } from './member.enum';
+import { MemberInterface } from './member.interface';
 
 @Injectable()
-export class MemberService {
+export class MemberService implements MemberInterface {
   constructor(
     @InjectRepository(MemberEntity)
     private readonly memberRepository: Repository<MemberEntity>,

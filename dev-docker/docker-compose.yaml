@@ -8,14 +8,13 @@ services:
     restart: 'unless-stopped'
     depends_on:
       - db
-      - mongo
       - redis
     networks:
       - api-network
     volumes:
       - ..:/api
   db:
-    image: mysql
+    image: mysql:8
     ports:
       - '3306:3306'
     restart: 'unless-stopped'
@@ -23,17 +22,8 @@ services:
       - MYSQL_ROOT_PASSWORD=hoplin1234!
       - MYSQL_ROOT_HOST=%
       - MYSQL_DATABASE=cloudedu
-    networks:
-      - api-network
-  mongo:
-    image: mongo
-    ports:
-      - '27017:27017'
-    restart: 'unless-stopped'
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password1234!
-      - MONGO_INITDB_DATABASE=cloud-edu
+    volumes:
+      - './db:/var/lib/mysql'
     networks:
       - api-network
   redis:
