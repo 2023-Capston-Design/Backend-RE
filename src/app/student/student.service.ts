@@ -3,9 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StudentEntity } from '@src/domain/student/student.entity';
 import { MemberNotFound } from '@src/infrastructure/exceptions';
 import { Repository } from 'typeorm';
+import { StudentInterface } from './student.inteface';
 
 @Injectable()
-export class StudentService {
+export class StudentService implements StudentInterface {
   constructor(
     @InjectRepository(StudentEntity)
     private readonly studentRepository: Repository<StudentEntity>,
