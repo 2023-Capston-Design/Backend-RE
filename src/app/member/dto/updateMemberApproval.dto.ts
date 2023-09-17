@@ -4,11 +4,6 @@ import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { member } from '@src/infrastructure/types';
 
 export class UpdateMemberApprovalDto implements Partial<MemberEntity> {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  id!: number;
-
   @ApiProperty({
     enum: member.Approve,
   })

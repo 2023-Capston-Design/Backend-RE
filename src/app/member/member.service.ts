@@ -27,6 +27,7 @@ import { UpdateMemberDto } from './dto/update-member.dto';
 import { UpdateMemberApprovalDto } from './dto/updateMemberApproval.dto';
 import { CheckType } from './member.enum';
 import { MemberInterface } from './member.interface';
+import { Member } from '../authentication/Member.decorator';
 
 @Injectable()
 export class MemberService implements MemberInterface {
@@ -256,10 +257,11 @@ export class MemberService implements MemberInterface {
   }
 
   public async updateMemberApproval(
+    member: MemberEntity,
     body: UpdateMemberApprovalDto,
   ): Promise<boolean> {
     const findMember = await this.memberRepository.findOneBy({
-      id: body.id,
+      id: member.id,
     });
     // Check memer exist
     if (!findMember) {
@@ -279,6 +281,7 @@ export class MemberService implements MemberInterface {
   }
 
   public async deleteMember(
+    uid: number,
     body: DeleteMemberDto,
     findMember: MemberEntity,
   ): Promise<boolean> {

@@ -82,20 +82,17 @@ export const mockCreateMemberDtoInstructor: CreateMemberDto = {
 };
 
 export const mockUpdateMemberDto: UpdateMemberDto = {
-  id: 1,
   changedpassword: 'password',
   originalpassword: 'password',
   birth: new Date(),
 };
 
 export const mockUpdateMemberApprovalDto: UpdateMemberApprovalDto = {
-  id: 1,
   approved: member.Approve.APPROVE,
   approvedReason: 'reason',
 };
 
 export const mockDeletememberDto: DeleteMemberDto = {
-  id: 1,
   password: 'password',
 };
 

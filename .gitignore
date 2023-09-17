@@ -38,3 +38,6 @@ logfile/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Docker db volume
+db/

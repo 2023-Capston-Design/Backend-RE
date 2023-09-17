@@ -305,7 +305,6 @@ describe('MemberService', () => {
     it("Update student's information", async () => {
       // Given
       const updateDto: UpdateMemberDto = {
-        id: memberStudent.id,
         name: 'changed-student',
         changedpassword: 'changed-password',
         originalpassword: mockCreateMemberDtoStudent(department.id).password,
@@ -319,7 +318,6 @@ describe('MemberService', () => {
     it("Update instructor's information", async () => {
       //Given
       const updateDto: UpdateMemberDto = {
-        id: memberInstructor.id,
         name: 'changed-instructor',
         changedpassword: 'changed-password',
         originalpassword: mockCreateMemberDtoStudent(department.id).password,
@@ -333,7 +331,6 @@ describe('MemberService', () => {
     it("Should not change member's information if password unmatched", async () => {
       //Given
       const wrongDto: UpdateMemberDto = {
-        id: memberStudent.id,
         originalpassword: 'wrong-password',
       };
       // When
@@ -349,7 +346,6 @@ describe('MemberService', () => {
     it('Unable to change : Illegal approval status', async () => {
       //Given
       const wrongDto: UpdateMemberApprovalDto = {
-        id: memberStudent.id,
         approved: 'illegal' as member.Approve,
         approvedReason: 'test',
       };
@@ -431,7 +427,6 @@ describe('MemberService', () => {
       // Given
       // Change member approval
       await service.updateMemberApproval({
-        id: memberStudent.id,
         approved: member.Approve.APPROVE,
         approvedReason: 'test',
       });

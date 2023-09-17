@@ -5,11 +5,6 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class DeleteMemberDto implements Partial<MemberEntity> {
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  id!: number; // Will be deleted after auth API generated
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   password!: string;
 
