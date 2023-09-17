@@ -32,6 +32,7 @@ import { CheckType, CheckTypeValidationPipe } from './member.enum';
 import { MemberInterface } from './member.interface';
 import { MemberService } from './member.service';
 import { MemberDocs } from './member.docs';
+import { GetUser } from './decorator/get-user.decorator';
 
 @Controller('member')
 @MemberDocs.Controller
@@ -147,10 +148,11 @@ export class MemberController implements MemberInterface {
   @Roles(member.Role.MANAGER)
   @MemberDocs.updateMemberApproval
   public async updateMemberApproval(
+    @Member() member: MemberEntity,
     @Body() body: UpdateMemberApprovalDto,
   ): Promise<CommonResponseDto> {
     return new CommonResponseDto(
-      await this.memberService.updateMemberApproval(body),
+      await this.memberService.updateMemberApproval(member, body),
     );
   }
 
@@ -158,11 +160,12 @@ export class MemberController implements MemberInterface {
   @UseGuards(JwtGuard)
   @MemberDocs.deleteMember
   public async deleteMember(
+    @GetUser('id') uid: number,
     @Body() body: DeleteMemberDto,
     @Member() member: MemberEntity,
   ): Promise<CommonResponseDto> {
     return new CommonResponseDto(
-      await this.memberService.deleteMember(body, member),
+      await this.memberService.deleteMember(uid, body, member),
     );
   }
 }

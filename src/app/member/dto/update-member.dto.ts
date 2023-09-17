@@ -9,11 +9,6 @@ import {
 } from 'class-validator';
 
 export class UpdateMemberDto implements Partial<MemberEntity> {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  id!: number; // Will be deleted after auth API generated
-
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
