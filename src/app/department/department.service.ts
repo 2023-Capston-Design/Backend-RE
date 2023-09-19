@@ -66,10 +66,7 @@ export class DepartmentService {
     return true;
   }
 
-  public async createDepartment(
-    body: CreateDepartmentDto,
-    profile?: Express.Multer.File,
-  ) {
+  public async createDepartment(body: CreateDepartmentDto) {
     // Deparment Name should be unique
     const checkNameTaken = await this.departmentRepository.findOneBy({
       name: body.name,
@@ -85,11 +82,6 @@ export class DepartmentService {
         // New department entity
         const newDepartment = new DepartmentEntity(body);
 
-        // Set department's profile URL
-        newDepartment.departmentProfileURL = profile
-          ? profile.destination
-          : null;
-
         const result = await departmentRepository.save(newDepartment);
         this.logger.log(`Department created : ${newDepartment.name}`);
         return result;
@@ -100,7 +92,6 @@ export class DepartmentService {
 
   public async updateDepartment(
     body: UpdateDepartmentDto,
-    profile?: Express.Multer.File,
   ): Promise<DepartmentEntity> {
     // Find department with ID
     const checkDepartmentExist = await this.departmentRepository.findOneBy({
@@ -137,28 +128,13 @@ export class DepartmentService {
           name: originalName,
           phoneNumber: originalPhoneNumber,
           url: originalURL,
-          departmentProfileURL: originalProfileURL,
         } = targetDepartment;
-
-        // Change profile image url
-        if (profile) {
-          // Delte previous file
-          fs.unlink(originalProfileURL, (err) => {
-            if (err) {
-              this.logger.error(err);
-            }
-          });
-          targetDepartment.departmentProfileURL = profile.destination;
-        }
         // Update target department's information
         targetDepartment.name = body.name ? body.name : originalName;
         targetDepartment.phoneNumber = body.phoneNumber
           ? body.phoneNumber
           : originalPhoneNumber;
         targetDepartment.url = body.url ? body.url : originalURL;
-        targetDepartment.departmentProfileURL = profile
-          ? profile.destination
-          : originalProfileURL;
         const reuslt = await departmentRepository.save(targetDepartment);
         this.logger.log(`Department updated : ${targetDepartment.name}`);
         return reuslt;

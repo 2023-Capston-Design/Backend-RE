@@ -95,13 +95,6 @@ export class DepartmentController {
   @ApiOperation({
     summary: '새 학부(혹은 부서)를 생성합니다. Manager 권한이 요구됩니다',
   })
-  @UseInterceptors(
-    FileInterceptor(
-      'profile',
-      imageLocalDiskOption(`${__dirname}/../../../department_profile`),
-    ),
-  )
-  @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ type: DepartmentEntity })
   @ApiUnprocessableEntityResponse({
     description: new UnprocessableEntityException().message,
@@ -115,20 +108,8 @@ export class DepartmentController {
   @Roles(member.Role.MANAGER)
   public async createDepartment(
     @Body() body: CreateDepartmentDto,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: '.(jpg|png)$',
-        })
-        .addMaxSizeValidator({ maxSize: 1000000 })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    file?: Express.Multer.File,
   ): Promise<DepartmentEntity> {
-    return await this.departmentService.createDepartment(body, file);
+    return await this.departmentService.createDepartment(body);
   }
 
   @Patch('/')
@@ -141,7 +122,6 @@ export class DepartmentController {
       imageLocalDiskOption(`${__dirname}/../../../department_profile`),
     ),
   )
-  @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ type: DepartmentEntity })
   @ApiBadRequestResponse({
     description: DEPARTMENT_EXCEPTION_MSG.DepartmentNameAlreadyTaken,
@@ -152,20 +132,8 @@ export class DepartmentController {
   @Roles(member.Role.MANAGER)
   public async updateDepartment(
     @Body() body: UpdateDepartmentDto,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: '.(jpg|png)$',
-        })
-        .addMaxSizeValidator({ maxSize: 1000000 })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    file?: Express.Multer.File,
   ): Promise<DepartmentEntity> {
-    return this.departmentService.updateDepartment(body, file);
+    return this.departmentService.updateDepartment(body);
   }
 
   @Delete('/')

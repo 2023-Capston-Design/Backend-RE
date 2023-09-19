@@ -4,35 +4,29 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
-  HttpStatus,
   Param,
-  ParseFilePipeBuilder,
   ParseIntPipe,
   Patch,
   Post,
   Query,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { MemberEntity } from '@src/domain/member/member.entity';
 import { CommonResponseDto } from '@src/infrastructure/common/common.response.dto';
-import { imageLocalDiskOption } from '@src/infrastructure/multer';
 import { member } from '@src/infrastructure/types';
 import { Member } from '../authentication/Member.decorator';
 import { JwtGuard } from '../authentication/jwt.guard';
 import { AllowedMember } from '../authorization/allowed.guard';
 import { Roles } from '../authorization/role.decorator';
+import { GetUser } from './decorator/get-user.decorator';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { DeleteMemberDto } from './dto/delete-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { UpdateMemberApprovalDto } from './dto/updateMemberApproval.dto';
+import { MemberDocs } from './member.docs';
 import { CheckType, CheckTypeValidationPipe } from './member.enum';
 import { MemberInterface } from './member.interface';
 import { MemberService } from './member.service';
-import { MemberDocs } from './member.docs';
-import { GetUser } from './decorator/get-user.decorator';
 
 @Controller('member')
 @MemberDocs.Controller
@@ -67,57 +61,21 @@ export class MemberController implements MemberInterface {
   }
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor(
-      'profile',
-      imageLocalDiskOption(`${__dirname}/../../../profiles`),
-    ),
-  )
   @MemberDocs.createMember
   public async createMember(
     @Body() body: CreateMemberDto,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: '.(jpg|png)$',
-        })
-        .addMaxSizeValidator({ maxSize: 1000000 })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    profileImage?: Express.Multer.File,
   ): Promise<MemberEntity> {
-    return await this.memberService.createMember(body, profileImage);
+    return await this.memberService.createMember(body);
   }
 
   @Patch()
   @UseGuards(JwtGuard)
-  @UseInterceptors(
-    FileInterceptor(
-      'profile',
-      imageLocalDiskOption(`${__dirname}/../../../profiles`),
-    ),
-  )
   @MemberDocs.updateMember
   public async updateMember(
     @Body() body: UpdateMemberDto,
     @Member() member: MemberEntity,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: '.(jpg|png)$',
-        })
-        .addMaxSizeValidator({ maxSize: 1000000 })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    file?: Express.Multer.File,
   ): Promise<MemberEntity> {
-    return await this.memberService.updateMember(body, member, file);
+    return await this.memberService.updateMember(body, member);
   }
 
   @Get('/check/:type/:value')

@@ -102,10 +102,7 @@ export class MemberService implements MemberInterface {
     return result;
   }
 
-  public async createMember(
-    body: CreateMemberDto,
-    profileImage?: Express.Multer.File,
-  ): Promise<MemberEntity> {
+  public async createMember(body: CreateMemberDto): Promise<MemberEntity> {
     // Check group id exist
     if (!(await this.checkValueIsAvailable(CheckType.GID, body.groupId))) {
       throw new GroupIDAlreadyTaken();
@@ -123,10 +120,6 @@ export class MemberService implements MemberInterface {
         const newMember = new MemberEntity(body);
         const groupId = body.groupId;
         const departmentId = body?.departmentId;
-        // Set profile picture destination
-        newMember.profileImgURL = profileImage
-          ? profileImage.destination
-          : null;
 
         // Set member approval
         newMember.approvedReason = 'New Member';
@@ -180,7 +173,6 @@ export class MemberService implements MemberInterface {
   public async updateMember(
     body: UpdateMemberDto,
     findMember: MemberEntity,
-    file?: Express.Multer.File,
   ): Promise<MemberEntity> {
     // Check member exist
     if (!findMember) {
@@ -202,17 +194,6 @@ export class MemberService implements MemberInterface {
           ? await this.hashPassword(body.changedpassword)
           : findMember.password;
         findMember.birth = body.birth ? body.birth : findMember.birth;
-
-        // Change profile image url
-        if (file) {
-          // Delete previous file
-          fs.unlink(findMember.profileImgURL, (err) => {
-            if (err) {
-              this.logger.error(err);
-            }
-          });
-          findMember.profileImgURL = file.destination;
-        }
 
         const result = await memberRepository.save(findMember);
         this.logger.log(

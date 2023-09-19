@@ -351,7 +351,7 @@ describe('MemberService', () => {
       };
       // When
       try {
-        await service.updateMemberApproval(wrongDto);
+        await service.updateMemberApproval(memberStudent, wrongDto);
       } catch (err) {
         // Then
         expect(err).toBeInstanceOf(Error);
@@ -361,21 +361,21 @@ describe('MemberService', () => {
     it("Should change member's approval", async () => {
       //Given
       const studentChangeDto: UpdateMemberApprovalDto = {
-        id: memberStudent.id,
         approved: member.Approve.REJECT,
         approvedReason: 'test',
       };
 
       const instructorChangeDto: UpdateMemberApprovalDto = {
-        id: memberInstructor.id,
         approved: member.Approve.APPROVE,
         approvedReason: 'test',
       };
       // When
       const resultStudent = await service.updateMemberApproval(
+        memberStudent,
         studentChangeDto,
       );
       const resultInstructor = await service.updateMemberApproval(
+        memberInstructor,
         instructorChangeDto,
       );
       // Then
@@ -426,7 +426,7 @@ describe('MemberService', () => {
     it('Should return Email not confirmed exception', async () => {
       // Given
       // Change member approval
-      await service.updateMemberApproval({
+      await service.updateMemberApproval(memberStudent, {
         approved: member.Approve.APPROVE,
         approvedReason: 'test',
       });
@@ -456,12 +456,11 @@ describe('MemberService', () => {
     it("Can't delete password unmatched member", async () => {
       //Given
       const deletDto: DeleteMemberDto = {
-        id: memberStudent.id,
         password: 'test',
       };
       // When
       try {
-        await service.deleteMember(deletDto, memberStudent);
+        await service.deleteMember(1, deletDto, memberStudent);
       } catch (err) {
         expect(err).toBeInstanceOf(PasswordUnmatched);
       }
@@ -470,19 +469,19 @@ describe('MemberService', () => {
     it('Delete member', async () => {
       //Given
       const studentDeleteDto: DeleteMemberDto = {
-        id: memberStudent.id,
         password: 'changed-password',
       };
       const instructorDeleteDto: DeleteMemberDto = {
-        id: memberInstructor.id,
         password: 'changed-password',
       };
       //When
       const studentResult = await service.deleteMember(
+        1,
         studentDeleteDto,
         memberStudent,
       );
       const instructorResult = await service.deleteMember(
+        1,
         instructorDeleteDto,
         memberInstructor,
       );
