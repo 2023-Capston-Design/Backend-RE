@@ -23,14 +23,6 @@ export class UpdateDepartmentDto implements Partial<DepartmentEntity> {
   @IsOptional()
   url?: string;
 
-  @ApiProperty({
-    type: String,
-    format: 'binary',
-    required: false,
-  })
-  @IsOptional()
-  profile?: Express.Multer.File;
-
   constructor(data: UpdateDepartmentDto) {
     Object.assign(this, data);
   }

@@ -53,7 +53,6 @@ export const MemberDocs: SwaggerObject<MemberInterface> = {
     ApiBearerAuth(),
   ),
   createMember: applyDecorators(
-    ApiConsumes('multipart/form-data'),
     ApiOperation({
       summary: '회원가입을 진행합니다.',
       description:
