@@ -88,6 +88,7 @@ export const mockUpdateMemberDto: UpdateMemberDto = {
 };
 
 export const mockUpdateMemberApprovalDto: UpdateMemberApprovalDto = {
+  id: 1,
   approved: member.Approve.APPROVE,
   approvedReason: 'reason',
 };

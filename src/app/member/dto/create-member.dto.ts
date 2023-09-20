@@ -58,13 +58,6 @@ export class CreateMemberDto implements Partial<MemberEntity> {
   @IsOptional()
   departmentId: number;
 
-  @ApiProperty({
-    type: String,
-    format: 'binary',
-    required: false,
-  })
-  profile?: Express.Multer.File;
-
   constructor(data: CreateMemberDto) {
     Object.assign(this, data);
   }

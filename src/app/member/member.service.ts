@@ -238,11 +238,10 @@ export class MemberService implements MemberInterface {
   }
 
   public async updateMemberApproval(
-    member: MemberEntity,
     body: UpdateMemberApprovalDto,
   ): Promise<boolean> {
     const findMember = await this.memberRepository.findOneBy({
-      id: member.id,
+      id: body.id,
     });
     // Check memer exist
     if (!findMember) {

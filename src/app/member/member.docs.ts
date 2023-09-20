@@ -2,12 +2,16 @@ import { UnprocessableEntityException, applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
+  ApiExtraModels,
   ApiOkResponse,
   ApiOperation,
+  ApiProperty,
   ApiTags,
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { MemberEntity } from '@src/domain/member/member.entity';
 import { CommonResponseDto } from '@src/infrastructure/common/common.response.dto';
@@ -18,6 +22,87 @@ import {
 } from '@src/infrastructure/exceptions';
 import { SwaggerObject } from '@src/infrastructure/types';
 import { MemberInterface } from './member.interface';
+import { Role, Sex } from '@src/infrastructure/types/member';
+
+class ManagerSignUpExample {
+  @ApiProperty({
+    example: 'hoplin',
+  })
+  name: string;
+  @ApiProperty({
+    example: 'password',
+  })
+  password: string;
+
+  @ApiProperty({
+    example: 'jhoplin7259@gmail.com',
+  })
+  email: string;
+
+  @ApiProperty({
+    example: 'B889047',
+  })
+  groupId: string;
+
+  @ApiProperty({
+    enum: Sex,
+    default: Sex.MALE,
+  })
+  sex: Sex;
+
+  @ApiProperty({
+    example: '1999-08-15',
+  })
+  birth: Date;
+
+  @ApiProperty({
+    enum: Role,
+    default: Role.MANAGER,
+  })
+  memberRole: Role;
+}
+
+class InstructorStudentSignUpExample {
+  @ApiProperty({
+    example: 'KJH',
+  })
+  name: string;
+
+  @ApiProperty({
+    example: 'password',
+  })
+  password: string;
+
+  @ApiProperty({
+    example: 'jhyoon0815103@gmail.com',
+  })
+  email: string;
+
+  @ApiProperty({
+    example: 'B889005',
+  })
+  groupId: string;
+
+  @ApiProperty({
+    enum: Sex,
+    default: Sex.MALE,
+  })
+  sex: Sex;
+
+  @ApiProperty({
+    example: '1999-08-15',
+  })
+  birth: Date;
+
+  @ApiProperty({
+    enum: Role,
+    default: Role.STUDENT,
+  })
+  memberRole: Role;
+
+  @ApiProperty({ example: 1 })
+  departmentId: number;
+}
 
 export const MemberDocs: SwaggerObject<MemberInterface> = {
   Controller: applyDecorators(ApiTags('Member')),
@@ -68,6 +153,44 @@ export const MemberDocs: SwaggerObject<MemberInterface> = {
         MEMBER_EXCEPTION_MSG.GroupIDAlreadyTaken,
         MEMBER_EXCEPTION_MSG.DepartmentIdNotGiven,
       ].join(', '),
+    }),
+    ApiExtraModels(ManagerSignUpExample, InstructorStudentSignUpExample),
+    ApiBody({
+      schema: {
+        oneOf: [
+          {
+            $ref: getSchemaPath(ManagerSignUpExample),
+          },
+          {
+            $ref: getSchemaPath(InstructorStudentSignUpExample),
+          },
+        ],
+      },
+      examples: {
+        manager: {
+          value: {
+            name: 'hoplin',
+            password: 'password',
+            email: 'jhoplin7259@gmail.com',
+            groupId: 'B889047',
+            sex: Sex.MALE,
+            birth: '1999-08-15',
+            memberRole: Role.MANAGER,
+          },
+        },
+        'Instructor & Student': {
+          value: {
+            name: 'KJH',
+            password: 'password',
+            email: 'jhyoon0815103@gmail.com',
+            groupId: 'B889005',
+            sex: Sex.MALE,
+            birth: '1999-08-15',
+            memberRole: Role.MANAGER,
+            departmentId: 1,
+          },
+        },
+      },
     }),
   ),
   updateMember: applyDecorators(

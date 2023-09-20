@@ -346,12 +346,13 @@ describe('MemberService', () => {
     it('Unable to change : Illegal approval status', async () => {
       //Given
       const wrongDto: UpdateMemberApprovalDto = {
+        id: 1,
         approved: 'illegal' as member.Approve,
         approvedReason: 'test',
       };
       // When
       try {
-        await service.updateMemberApproval(memberStudent, wrongDto);
+        await service.updateMemberApproval(wrongDto);
       } catch (err) {
         // Then
         expect(err).toBeInstanceOf(Error);
@@ -361,21 +362,21 @@ describe('MemberService', () => {
     it("Should change member's approval", async () => {
       //Given
       const studentChangeDto: UpdateMemberApprovalDto = {
+        id: memberStudent.id,
         approved: member.Approve.REJECT,
         approvedReason: 'test',
       };
 
       const instructorChangeDto: UpdateMemberApprovalDto = {
+        id: memberInstructor.id,
         approved: member.Approve.APPROVE,
         approvedReason: 'test',
       };
       // When
       const resultStudent = await service.updateMemberApproval(
-        memberStudent,
         studentChangeDto,
       );
       const resultInstructor = await service.updateMemberApproval(
-        memberInstructor,
         instructorChangeDto,
       );
       // Then
@@ -426,7 +427,8 @@ describe('MemberService', () => {
     it('Should return Email not confirmed exception', async () => {
       // Given
       // Change member approval
-      await service.updateMemberApproval(memberStudent, {
+      await service.updateMemberApproval({
+        id: memberStudent.id,
         approved: member.Approve.APPROVE,
         approvedReason: 'test',
       });
