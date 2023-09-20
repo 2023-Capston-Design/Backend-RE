@@ -142,10 +142,7 @@ describe('MemberController', () => {
   describe('Update member approval', () => {
     it('Shoudl call updateMemberApproval once', async () => {
       const spy = jest.spyOn(service, 'updateMemberApproval');
-      await controller.updateMemberApproval(
-        {} as MemberEntity,
-        mockUpdateMemberApprovalDto,
-      );
+      await controller.updateMemberApproval(mockUpdateMemberApprovalDto);
       expect(spy).toBeCalledTimes(1);
     });
   });

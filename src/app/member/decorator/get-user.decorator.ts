@@ -8,8 +8,8 @@ import { Request } from 'express';
 
 export const GetUser = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
-    const user = ctx.switchToHttp().getResponse<Request>()?.user;
-
+    const req = ctx.switchToHttp().getRequest<Request>();
+    const user = req.user;
     if (!user) {
       throw new ForbiddenException('Forbidden Request');
     }

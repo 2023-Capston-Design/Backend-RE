@@ -21,10 +21,7 @@ export interface MemberInterface {
   ): CommonReturnType;
   checkValueIsAvailable(tp: CheckType, val: string): CommonReturnType;
   getMemberApproval(id: number): CommonReturnType;
-  updateMemberApproval(
-    member: MemberEntity,
-    body: UpdateMemberApprovalDto,
-  ): CommonReturnType;
+  updateMemberApproval(body: UpdateMemberApprovalDto): CommonReturnType;
   deleteMember(
     uid: number,
     body: DeleteMemberDto,

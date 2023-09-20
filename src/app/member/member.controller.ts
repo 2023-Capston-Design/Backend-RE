@@ -106,11 +106,10 @@ export class MemberController implements MemberInterface {
   @Roles(member.Role.MANAGER)
   @MemberDocs.updateMemberApproval
   public async updateMemberApproval(
-    @Member() member: MemberEntity,
     @Body() body: UpdateMemberApprovalDto,
   ): Promise<CommonResponseDto> {
     return new CommonResponseDto(
-      await this.memberService.updateMemberApproval(member, body),
+      await this.memberService.updateMemberApproval(body),
     );
   }
 

@@ -46,7 +46,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         },
       },
     });
-    console.log(user);
     // If user not found
     if (!user) {
       throw new MemberNotFound();
