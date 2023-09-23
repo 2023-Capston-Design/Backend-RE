@@ -1,20 +1,15 @@
+import { Logger } from '@hoplin/nestjs-logger';
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MemberEntity } from '@src/domain/member/member.entity';
-import { Repository } from 'typeorm';
-import { LoginRequestDto } from './dto/Login.request.dto';
-import { LoginResponseDto } from './dto/Login.response.dto';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
-import jwtConfig from '@src/config/config/jwt.config';
+import { JwtService } from '@nestjs/jwt';
 import defaultConfig from '@src/config/config/default.config';
-import * as bcrypt from 'bcryptjs';
+import jwtConfig from '@src/config/config/jwt.config';
+import { MemberEntity } from '@src/domain/member/member.entity';
 import {
   BearerTokenRequired,
   EmailYetConfirmed,
   IllegalTokenDetected,
   InvalidMemberApproval,
-  MemberNotFound,
   NotBearerToken,
   PasswordUnmatched,
   RefreshTokenExpired,
@@ -22,21 +17,20 @@ import {
   TokenNotFound,
   TokenRequired,
 } from '@src/infrastructure/exceptions';
-import { MemberService } from '../member/member.service';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { Logger } from '@hoplin/nestjs-logger';
-import { RedisCacheService } from '../redis-cache/redis-cache.service';
-import { Request } from 'express';
-import { RefreshRequestDto } from './dto/Refresh.request.dto';
+import { member } from '@src/infrastructure/types';
 import {
   JwtDecodedPayload,
   JwtSubjectType,
 } from '@src/infrastructure/types/jwt';
-import { MailService } from '../mail/mail.service';
-import { member } from '@src/infrastructure/types';
-import { SendEmailRequestDto } from './dto/SendEmail.request.dto';
+import { Request } from 'express';
 import { v4 } from 'uuid';
+import { MailService } from '../mail/mail.service';
+import { MemberService } from '../member/member.service';
+import { RedisCacheService } from '../redis-cache/redis-cache.service';
+import { LoginRequestDto } from './dto/Login.request.dto';
+import { LoginResponseDto } from './dto/Login.response.dto';
+import { RefreshRequestDto } from './dto/Refresh.request.dto';
+import { SendEmailRequestDto } from './dto/SendEmail.request.dto';
 import { emailVerificationHTML } from './mail/email-verification.html';
 
 @Injectable()

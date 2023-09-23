@@ -1,12 +1,12 @@
 import {
-  Controller,
-  Post,
-  Get,
   Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
   Req,
   UseGuards,
-  Query,
-  Delete,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -17,23 +17,20 @@ import {
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
-import { LoginRequestDto } from './dto/Login.request.dto';
-import { AuthenticationService } from './authentication.service';
-import { LoginResponseDto } from './dto/Login.response.dto';
+import { MemberEntity } from '@src/domain/member/member.entity';
+import { CommonResponseDto } from '@src/infrastructure/common/common.response.dto';
 import {
   AUTH_EXCEPTION_MSG,
   MEMBER_EXCEPTION_MSG,
 } from '@src/infrastructure/exceptions';
 import { Request } from 'express';
-import { RefreshRequestDto } from './dto/Refresh.request.dto';
-import { JwtGuard } from './jwt.guard';
-import { join } from 'path';
-import { SendEmailRequestDto } from './dto/SendEmail.request.dto';
-import { CommonResponseDto } from '@src/infrastructure/common/common.response.dto';
 import { Member } from './Member.decorator';
-import { member } from '@src/infrastructure/types';
-import { AllowedMember } from '../authorization/allowed.guard';
-import { MemberEntity } from '@src/domain/member/member.entity';
+import { AuthenticationService } from './authentication.service';
+import { LoginRequestDto } from './dto/Login.request.dto';
+import { LoginResponseDto } from './dto/Login.response.dto';
+import { RefreshRequestDto } from './dto/Refresh.request.dto';
+import { SendEmailRequestDto } from './dto/SendEmail.request.dto';
+import { JwtGuard } from './jwt.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
