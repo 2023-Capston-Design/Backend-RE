@@ -1,12 +1,12 @@
-import { MemberEntity } from '@src/domain/member/member.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { MemberEntity } from '@src/domain/member/member.entity';
 import { member } from '@src/infrastructure/types';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class UpdateMemberApprovalDto implements Partial<MemberEntity> {
   @ApiProperty()
+  @IsNumber()
   @IsNotEmpty()
-  @IsEnum(member.Approve)
   id: number;
 
   @ApiProperty({
