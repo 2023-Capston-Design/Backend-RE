@@ -14,12 +14,14 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity('student_class')
 export class ClassStudentEntity {
   @PrimaryGeneratedColumn()
+  @ApiProperty()
   id: number;
 
   @ManyToOne(() => StudentEntity, (student) => student.classstudent)
   @JoinColumn({
     name: 'student_id',
   })
+  @ApiProperty()
   students: Relation<StudentEntity>;
 
   @ManyToOne(() => ClassEntity, (cls) => cls.classtudent, {
@@ -32,6 +34,7 @@ export class ClassStudentEntity {
       name: 'class_name',
     },
   ])
+  @ApiProperty()
   classes: Relation<ClassEntity>;
   constructor(data: Partial<ClassStudentEntity>) {
     Object.assign(this, data);

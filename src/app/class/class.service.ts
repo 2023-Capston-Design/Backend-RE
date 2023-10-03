@@ -34,6 +34,8 @@ export class ClassService {
   constructor(
     @InjectRepository(ClassEntity)
     private readonly classRepository: Repository<ClassEntity>,
+    @InjectRepository(ClassStudentEntity)
+    private readonly classStudentRepository: Repository<ClassStudentEntity>,
     private readonly classImageService: ClassImageService,
     private readonly memberService: MemberService,
     private readonly departmentService: DepartmentService,
@@ -46,6 +48,28 @@ export class ClassService {
     return await this.classRepository.find({
       skip: page - 1,
       take: pagesize,
+      relations: {
+        instructor: true,
+      },
+    });
+  }
+
+  public async getAllClassStudent(
+    page: number,
+    pagesize: number,
+    student: MemberEntity,
+  ) {
+    return await this.classStudentRepository.find({
+      skip: page - 1,
+      take: pagesize,
+      where: {
+        students: {
+          id: student.id,
+        },
+      },
+      relations: {
+        classes: true,
+      },
     });
   }
 

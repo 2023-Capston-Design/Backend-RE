@@ -41,6 +41,7 @@ import { Roles } from '../authorization/role.decorator';
 import { member } from '@src/infrastructure/types';
 import { Member } from '../authentication/Member.decorator';
 import { MemberEntity } from '@src/domain/member/member.entity';
+import { ClassStudentEntity } from '@src/domain/class_student/class-student.entity';
 
 @ApiTags('Class')
 @Controller('class')
@@ -62,6 +63,24 @@ export class ClassController {
     @Query('pagesize', new DefaultValuePipe(10), ParseIntPipe) pagesize: number,
   ) {
     return await this.classService.getAllClass(page, pagesize);
+  }
+
+  @Get('/student')
+  @ApiOperation({
+    summary: '학생의 수업 목록을 불러옵니다',
+  })
+  @ApiOkResponse({
+    type: ClassStudentEntity,
+    isArray: true,
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  public async getAllClassStudent(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('pagesize', new DefaultValuePipe(10), ParseIntPipe) pagesize: number,
+    @Member() student: MemberEntity,
+  ) {
+    return await this.classService.getAllClassStudent(page, pagesize, student);
   }
 
   @Get('/id/:id')
