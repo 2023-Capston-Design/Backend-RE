@@ -6,6 +6,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
   Relation,
@@ -48,6 +49,9 @@ export class InstructorEntity {
   @OneToMany(() => ClassImageEntiy, (ci) => ci.instructor)
   @ApiProperty()
   images: Relation<ClassImageEntiy>[];
+
+  @OneToOne(() => MemberEntity, (member) => member.instructorProfile)
+  member: Relation<MemberEntity>;
 
   constructor(data: Partial<InstructorEntity>) {
     Object.assign(this, data);

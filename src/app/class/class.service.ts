@@ -151,7 +151,9 @@ export class ClassService {
         departmentId: student.studentProfile.department.id,
       },
       relations: {
-        instructor: true,
+        instructor: {
+          member: true,
+        },
       },
     });
     // Filter only ids
