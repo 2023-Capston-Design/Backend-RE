@@ -51,6 +51,7 @@ import { EnrollClassDto } from './dto/enroll-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { DeleteClassDto } from './dto/delete-class.dto';
 import { WithdrawClassDto } from './dto/withdraw-class.dto';
+import { ClassStudentEntity } from '@src/domain/class_student/class-student.entity';
 
 describe('ClassService', () => {
   jest.setTimeout(3000000);
@@ -85,6 +86,7 @@ describe('ClassService', () => {
   let memberRepository: Repository<MemberEntity>;
   let classImageRepository: Repository<ClassImageEntiy>;
   let classRepository: Repository<ClassEntity>;
+  let classStudentRepository: Repository<ClassStudentEntity>;
 
   let exmapleClass: CreateClassDto;
 
@@ -106,6 +108,7 @@ describe('ClassService', () => {
     memberRepository = dataSource.getRepository(MemberEntity);
     classImageRepository = dataSource.getRepository(ClassImageEntiy);
     classRepository = dataSource.getRepository(ClassEntity);
+    classStudentRepository = dataSource.getRepository(ClassStudentEntity);
 
     department = await departmentRepository.save(exampleDepartmentEntity);
     department2 = await departmentRepository.save(exampleDepartmentEntity2);
@@ -200,6 +203,10 @@ describe('ClassService', () => {
         {
           provide: getRepositoryToken(InstructorEntity),
           useValue: dataSource.getRepository(InstructorEntity),
+        },
+        {
+          provide: getRepositoryToken(ClassStudentEntity),
+          useValue: dataSource.getRepository(ClassStudentEntity),
         },
         {
           provide: defaultConfig.KEY,

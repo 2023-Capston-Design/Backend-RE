@@ -146,9 +146,14 @@ export class ClassService {
 
   public async getAvailableClasses(student: MemberEntity) {
     // Filter department
-    const filterDepartment = await this.getClassByDepartment(
-      student.studentProfile.department.id,
-    );
+    const filterDepartment = await this.classRepository.find({
+      where: {
+        departmentId: student.studentProfile.department.id,
+      },
+      relations: {
+        instructor: true,
+      },
+    });
     // Filter only ids
     const filteredClassIds = filterDepartment.map((x) => x.id);
 
