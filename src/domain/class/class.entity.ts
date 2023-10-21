@@ -46,12 +46,12 @@ export class ClassEntity {
   @ApiProperty()
   departmentId: number;
 
-  @ApiProperty()
-  @ManyToOne(() => ClassImageEntiy, (img) => img.classes)
-  @JoinColumn({
-    name: 'class_container_image_id',
+  @Column({
+    type: String,
+    nullable: false,
+    default: '',
   })
-  class_image: Relation<ClassImageEntiy>;
+  instructorEnv: string;
 
   @ApiProperty()
   @OneToMany(() => ClassStudentEntity, (cs) => cs.classes)

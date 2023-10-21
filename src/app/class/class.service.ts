@@ -28,6 +28,7 @@ import { EnrollClassDto } from './dto/enroll-class.dto';
 import { ClassStudentEntity } from '@src/domain/class_student/class-student.entity';
 import { WithdrawClassDto } from './dto/withdraw-class.dto';
 import { MemberEntity } from '@src/domain/member/member.entity';
+import axios from 'axios';
 
 @Injectable()
 export class ClassService {
@@ -197,10 +198,22 @@ export class ClassService {
     if (studentCount + 1 > findClass.maximum_student) {
       throw new StudentCountExceed();
     }
+
+    const request = await axios.post(
+      'http://host.docker.internal:3500/backoffice/init/student',
+      {
+        classId: findClass.id,
+        studentId: student.id,
+      },
+    );
+    const env = request.data.host;
+
     const newStudentClass = new ClassStudentEntity({
       students: student.studentProfile,
       classes: findClass,
+      studentEnv: env,
     });
+
     const result = await this.dataSource.transaction(
       async (manager: EntityManager) => {
         const repository = manager.getRepository(ClassStudentEntity);
@@ -219,19 +232,7 @@ export class ClassService {
     const instructor = await this.memberService.checkApprovedInstructor(
       body.instructorId,
     );
-    // Check image exist
-    const envImage = await this.classImageService.getClassImageById(
-      body.classImageId,
-    );
-    // If image status is not pending
-    if (envImage.status !== classImg.status.SUCCESS) {
-      switch (envImage.status) {
-        case classImg.status.PENDING:
-          throw new ImageYetPending();
-        default:
-          throw new ImageBuildFailed();
-      }
-    }
+
     // Check instructor already enrolled class with same name
     const instructorClasses = (
       await this.getClassByInstructor(body.instructorId)
@@ -255,13 +256,26 @@ export class ClassService {
 
         newClass.departmentId = instructor.instructorProfile.department.id;
         newClass.instructor = instructor.instructorProfile;
-        newClass.class_image = envImage;
 
         const saveClass = await repository.save(newClass);
         this.logger.log(`New class saved : ${body.name}`);
         return saveClass;
       },
     );
+
+    const request = await axios.post(
+      'http://host.docker.internal:3500/backoffice/init',
+      {
+        classId: newClass.id,
+        instructorId: instructor.id,
+      },
+    );
+
+    await this.classRepository.save({
+      ...newClass,
+      instructorEnv: request.data.host,
+    });
+
     return newClass;
   }
 
