@@ -36,12 +36,6 @@ export class ClassStudentEntity {
   ])
   @ApiProperty()
   classes: Relation<ClassEntity>;
-
-  @Column({
-    type: String,
-    nullable: false,
-  })
-  studentEnv: string;
   constructor(data: Partial<ClassStudentEntity>) {
     Object.assign(this, data);
   }

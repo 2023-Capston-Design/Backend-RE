@@ -53,6 +53,10 @@ export class ClassImageEntiy {
   @ApiProperty()
   createdAt: Date;
 
+  @OneToMany(() => ClassEntity, (cls) => cls.class_image)
+  @ApiProperty()
+  classes: ClassEntity[];
+
   @ManyToOne(() => InstructorEntity, (ins) => ins.images, {
     cascade: true,
   })

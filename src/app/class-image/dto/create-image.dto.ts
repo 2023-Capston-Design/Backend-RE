@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ClassImageEntiy } from '@src/domain/class-image/classimage.entity';
-import { IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
 
 export class CreateImageDto implements Partial<ClassImageEntiy> {
   @ApiProperty()
@@ -10,7 +10,7 @@ export class CreateImageDto implements Partial<ClassImageEntiy> {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   instructor_id!: number;
 
   @ApiProperty()

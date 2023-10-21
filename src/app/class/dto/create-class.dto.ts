@@ -18,6 +18,13 @@ export class CreateClassDto implements Partial<Omit<ClassEntity, 'id'>> {
   @IsNumber()
   instructorId: number;
 
+  @ApiProperty({
+    nullable: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  classImageId: number;
+
   constructor(data: CreateClassDto) {
     Object.assign(this, data);
   }
