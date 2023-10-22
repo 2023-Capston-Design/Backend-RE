@@ -27,7 +27,7 @@ services:
     networks:
       - api-network
   redis:
-    image: arm64v8/redis
+    image: redis
     ports:
       - '6379:6379'
     networks:
